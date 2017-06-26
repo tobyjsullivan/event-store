@@ -4,6 +4,7 @@ import (
     "testing"
     "encoding/hex"
     "encoding/base64"
+    "strings"
 )
 
 func TestEventID_Parse(t *testing.T) {
@@ -19,6 +20,33 @@ func TestEventID_Parse(t *testing.T) {
 
     if [32]byte(id) != expected {
         t.Errorf("Parsed ID did not match expected. Actual: %x; Expected: %x", [32]byte(id), expected)
+    }
+}
+
+func TestEventID_Parse_Genesis(t *testing.T) {
+    in := "0"
+    id := NewEventID()
+    id.Parse(in)
+
+    expected := [32]byte{
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0 }
+
+    if [32]byte(id) != expected {
+        t.Errorf("Parsed ID did not match expected. Actual: %x; Expected: %x", [32]byte(id), expected)
+    }
+}
+
+func TestEventID_String(t *testing.T) {
+    in := "952822DE6A627EA459E1E7A8964191C79FCCFB14EA545D93741B5CF3ED71A09A"
+    id := NewEventID()
+    id.Parse(in)
+
+    expected := strings.ToLower(in)
+    if actual := id.String(); actual != expected {
+        t.Errorf("Hex did not match expected. Actual: %s; Expected: %s", actual, expected)
     }
 }
 

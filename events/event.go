@@ -22,6 +22,11 @@ func (id *EventID) Parse(s string) error {
     return nil
 }
 
+func (id *EventID) String() string {
+    b := [32]byte(*id)
+    return hex.EncodeToString(b[:])
+}
+
 type Event struct {
     PreviousEvent EventID
     Type string
