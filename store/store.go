@@ -22,7 +22,7 @@ func NewS3Store(svc *s3.S3, bucket string) *Store {
 }
 
 type eventFormat struct {
-    Prev string `json:"prevous"`
+    Prev string `json:"previous"`
     Type string `json:"type"`
     Data string `json:"data"`
 }
