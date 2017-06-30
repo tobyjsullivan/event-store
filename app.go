@@ -45,7 +45,7 @@ func init() {
             Credentials: credentials.NewEnvCredentials(),
             Region: aws.String(region),
             Logger: aws.LoggerFunc(logger.Println),
-            LogLevel: aws.LogLevel(aws.LogDebugWithHTTPBody),
+            LogLevel: aws.LogLevel(aws.LogOff),
         },
     ))
     s3svc := s3.New(sess)
