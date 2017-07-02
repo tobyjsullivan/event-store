@@ -16,6 +16,7 @@ import (
     "github.com/aws/aws-sdk-go/aws"
     "github.com/aws/aws-sdk-go/aws/credentials"
     "log"
+    "encoding/json"
 )
 
 var (
@@ -79,6 +80,15 @@ func statusHandler(w http.ResponseWriter, r *http.Request) {
     fmt.Fprint(w, "The service is online!\n")
 }
 
+type jsResponse struct {
+    Data interface{} `json:"data,omitempty"`
+    Error error `json:"error,omitempty"`
+}
+
+type addEventResponse struct {
+    EventID string `json:"eventId"`
+}
+
 func addEventHandler(w http.ResponseWriter, r *http.Request) {
     err := r.ParseForm()
     if err != nil {
@@ -129,5 +139,17 @@ func addEventHandler(w http.ResponseWriter, r *http.Request) {
     }
 
     id := e.ID()
-    fmt.Fprintf(w, "Event saved: %s", id.String())
+
+    out := jsResponse{
+        Data: addEventResponse{
+            EventID: id.String(),
+        },
+    }
+
+    encoder := json.NewEncoder(w)
+    err = encoder.Encode(&out)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+    }
+    return
 }
